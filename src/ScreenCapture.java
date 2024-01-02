@@ -59,7 +59,7 @@ public class ScreenCapture extends JFrame {
 
             while (file.exists()) {
                 // Modify the file name
-                filePath = "C:\\Users\\cheng\\Documents\\icon" + fileCounter + ".png";
+                filePath = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "icon" + fileCounter + ".png";
                 file = new File(filePath);
                 fileCounter++;
             }

@@ -38,6 +38,7 @@ public class ScreenCapture1 extends JFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_F12) {
+                    dispose();
                     takeScreenshot();
                     minimizeToTray();
                 }
@@ -85,7 +86,7 @@ public class ScreenCapture1 extends JFrame {
 
             while (file.exists()) {
                 // Modify the file name
-                filePath = "C:\\Users\\cheng\\Documents\\icon" + fileCounter + ".png";
+                filePath = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "icon" + fileCounter + ".png";
                 file = new File(filePath);
                 fileCounter++;
             }
