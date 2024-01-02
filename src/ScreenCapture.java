@@ -11,6 +11,12 @@ public class ScreenCapture extends JFrame {
     private String filePath = "C:\\Users\\cheng\\Documents\\icon.png"; // Replace with your desired file path
     private int fileCounter = 1;
     private JLabel instruction = new JLabel("Press F12 key to screenshot");
+    private TrayIcon trayIcon;
+    private SystemTray systemTray;
+    private boolean isMinimized = false;
+    private JMenuItem openMenuItem;
+    private JMenuItem exitMenuItem;
+
 
     public ScreenCapture() {
         try {
@@ -43,9 +49,40 @@ public class ScreenCapture extends JFrame {
                     });
                     timer.setRepeats(false);
                     timer.start();
+                    minimizeToTray();
                 }
             }
         });
+
+        if (SystemTray.isSupported()) {
+            systemTray = SystemTray.getSystemTray();
+            Image image = Toolkit.getDefaultToolkit().getImage("icon.png"); // Replace with your icon image path
+            PopupMenu popupMenu = new PopupMenu();
+            MenuItem openMenuItem = new MenuItem("Open");
+            MenuItem exitMenuItem = new MenuItem("Exit");
+
+            openMenuItem.addActionListener(e -> {
+                restoreFromTray();
+            });
+
+            exitMenuItem.addActionListener(e -> {
+                exitApplication();
+            });
+
+            popupMenu.add(openMenuItem);
+            popupMenu.addSeparator();
+            popupMenu.add(exitMenuItem);
+
+            trayIcon = new TrayIcon(image, "ScreenCapture", popupMenu);
+            trayIcon.setImageAutoSize(true);
+
+            try {
+                systemTray.add(trayIcon);
+            } catch (AWTException e) {
+                e.printStackTrace();
+            }
+        }
+    
     }
 
     private void captureAndClose() {
@@ -75,6 +112,25 @@ public class ScreenCapture extends JFrame {
             System.exit(0);
         }
     }
+
+    private void minimizeToTray() {
+        setVisible(false);
+        isMinimized = true;
+    }
+
+    private void restoreFromTray() {
+        setVisible(true);
+        setExtendedState(JFrame.NORMAL);
+        isMinimized = false;
+        toFront();
+    }
+
+    private void exitApplication() {
+        systemTray.remove(trayIcon);
+        dispose();
+        System.exit(0);
+    }
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(ScreenCapture::new);
