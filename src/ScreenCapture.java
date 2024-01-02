@@ -8,7 +8,6 @@ import java.io.IOException;
 
 public class ScreenCapture extends JFrame {
     private Robot robot;
-    private String filePath = "C:\\Users\\cheng\\Documents\\icon.png"; // Replace with your desired file path
     private int fileCounter = 1;
     private JLabel instruction = new JLabel("Press F12 key to screenshot");
     private TrayIcon trayIcon;
@@ -90,13 +89,12 @@ public class ScreenCapture extends JFrame {
             // Capture the screen
             Rectangle screenRect = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
             BufferedImage screenFullImage = robot.createScreenCapture(screenRect);
-
+            String filePath  = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "icon" + fileCounter + ".png";
             // Save the screenshot to the specified file path
             File file = new File(filePath);
 
             while (file.exists()) {
                 // Modify the file name
-                filePath = System.getProperty("user.home") + File.separator + "Documents" + File.separator + "icon" + fileCounter + ".png";
                 file = new File(filePath);
                 fileCounter++;
             }
